@@ -1,0 +1,21 @@
+Name: userservice.rpc
+ListenOn: 0.0.0.0:50052
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: userservice.rpc
+
+
+#jwtAuth
+JwtAuth:
+  AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+  AccessExpire: 100000
+
+
+
+# 数据库
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/d_user?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Cache:
+  - Host: redis:6379
+    Pass: "123456"

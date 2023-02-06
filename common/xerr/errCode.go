@@ -1,0 +1,18 @@
+package xerr
+
+//成功返回
+const OK uint32 = 200
+
+/**(前3位代表业务,后三位代表具体功能)**/
+
+//全局错误码
+const ERROR_CODE_SERVER_COMMON uint32 = 100001
+const ERROR_CODE_REUQEST_PARAM uint32 = 100002
+const ERROR_CODE_TOKEN_EXPIRE uint32 = 100003
+const ERROR_CODE_TOKEN_GENERATE uint32 = 100004
+const ERROR_CODE_DB_ERROR uint32 = 100005
+const ERROR_CODE_DB_UPDATE_AFFECTED_ZERO uint32 = 100006
+
+//用户模块
+const ERROR_CODE_USER_NOT_EXIST uint32 = 200001
+const ERROR_CODE_USER_PASSWORD_ERROR uint32 = 200002

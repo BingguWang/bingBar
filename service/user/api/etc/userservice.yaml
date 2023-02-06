@@ -1,0 +1,16 @@
+Name: UserService
+Host: 0.0.0.0
+Port: 50051
+
+
+#jwtAuth
+JwtAuth:
+  AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+  AccessExpire: 100000
+
+
+UserServiceRpcConf:
+  Endpoints:
+    - 127.0.0.1:50052
+  NonBlock: true
+
