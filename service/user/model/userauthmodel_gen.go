@@ -3,113 +3,121 @@
 package model
 
 import (
-	"context"
-	"database/sql"
-	"fmt"
-	"strings"
-	"time"
+    "context"
+    "database/sql"
+    "fmt"
+    "strings"
+    "time"
 
-	"github.com/zeromicro/go-zero/core/stores/builder"
-	"github.com/zeromicro/go-zero/core/stores/cache"
-	"github.com/zeromicro/go-zero/core/stores/sqlc"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"github.com/zeromicro/go-zero/core/stringx"
+    "github.com/zeromicro/go-zero/core/stores/builder"
+    "github.com/zeromicro/go-zero/core/stores/cache"
+    "github.com/zeromicro/go-zero/core/stores/sqlc"
+    "github.com/zeromicro/go-zero/core/stores/sqlx"
+    "github.com/zeromicro/go-zero/core/stringx"
 )
 
 var (
-	userAuthFieldNames          = builder.RawFieldNames(&UserAuth{})
-	userAuthRows                = strings.Join(userAuthFieldNames, ",")
-	userAuthRowsExpectAutoSet   = strings.Join(stringx.Remove(userAuthFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	userAuthRowsWithPlaceHolder = strings.Join(stringx.Remove(userAuthFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+    userAuthFieldNames          = builder.RawFieldNames(&UserAuth{})
+    userAuthRows                = strings.Join(userAuthFieldNames, ",")
+    userAuthRowsExpectAutoSet   = strings.Join(stringx.Remove(userAuthFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+    userAuthRowsWithPlaceHolder = strings.Join(stringx.Remove(userAuthFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheUserAuthIdPrefix = "cache:userAuth:id:"
+    cacheUserAuthIdPrefix              = "cache:userservice:user:userAuth:id:"
+    cacheUserAuthAuthTypeAuthKeyPrefix = "cache:userservice:user:userAuth:authType:authKey"
+    cacheUserAuthUserIdAuthTypePrefix  = "cache:userservice:user:userAuth:userId:authType:"
 )
 
 type (
-	userAuthModel interface {
-		Insert(ctx context.Context, data *UserAuth) (sql.Result, error)
-		FindOne(ctx context.Context, id int64) (*UserAuth, error)
-		Update(ctx context.Context, data *UserAuth) error
-		Delete(ctx context.Context, id int64) error
-	}
+    userAuthModel interface {
+        Insert(ctx context.Context, data *UserAuth, session sqlx.Session) (sql.Result, error)
+        FindOne(ctx context.Context, id int64) (*UserAuth, error)
+        Update(ctx context.Context, data *UserAuth) error
+        Delete(ctx context.Context, id int64) error
+    }
 
-	defaultUserAuthModel struct {
-		sqlc.CachedConn
-		table string
-	}
+    defaultUserAuthModel struct {
+        sqlc.CachedConn
+        table string
+    }
 
-	UserAuth struct {
-		Id        int64        `db:"id"`
-		CreatedAt time.Time    `db:"created_at"`
-		UpdatedAt time.Time    `db:"updated_at"`
-		DeletedAt sql.NullTime `db:"deleted_at"`
-		Version   int64        `db:"version"`
-		AuthKey   string       `db:"auth_key"`  // 平台唯一id
-		AuthType  string       `db:"auth_type"` // 平台类型
-		UserId    int64        `db:"user_id"`
-	}
+    UserAuth struct {
+        Id        int64        `db:"id"`
+        CreatedAt time.Time    `db:"created_at"`
+        UpdatedAt time.Time    `db:"updated_at"`
+        DeletedAt sql.NullTime `db:"deleted_at"`
+        Version   int64        `db:"version"`
+        AuthKey   string       `db:"auth_key"`  // 平台唯一id
+        AuthType  string       `db:"auth_type"` // 平台类型
+        UserId    int64        `db:"user_id"`
+    }
 )
 
 func newUserAuthModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultUserAuthModel {
-	return &defaultUserAuthModel{
-		CachedConn: sqlc.NewConn(conn, c),
-		table:      "`user_auth`",
-	}
+    return &defaultUserAuthModel{
+        CachedConn: sqlc.NewConn(conn, c),
+        table:      "`user_auth`",
+    }
 }
 
 func (m *defaultUserAuthModel) Delete(ctx context.Context, id int64) error {
-	userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
-		return conn.ExecCtx(ctx, query, id)
-	}, userAuthIdKey)
-	return err
+    userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, id)
+    _, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+        query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
+        return conn.ExecCtx(ctx, query, id)
+    }, userAuthIdKey)
+    return err
 }
 
 func (m *defaultUserAuthModel) FindOne(ctx context.Context, id int64) (*UserAuth, error) {
-	userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, id)
-	var resp UserAuth
-	err := m.QueryRowCtx(ctx, &resp, userAuthIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userAuthRows, m.table)
-		return conn.QueryRowCtx(ctx, v, query, id)
-	})
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
+    userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, id)
+    var resp UserAuth
+    err := m.QueryRowCtx(ctx, &resp, userAuthIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+        query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userAuthRows, m.table)
+        return conn.QueryRowCtx(ctx, v, query, id)
+    })
+    switch err {
+    case nil:
+        return &resp, nil
+    case sqlc.ErrNotFound:
+        return nil, ErrNotFound
+    default:
+        return nil, err
+    }
 }
 
-func (m *defaultUserAuthModel) Insert(ctx context.Context, data *UserAuth) (sql.Result, error) {
-	userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, data.Id)
-	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, userAuthRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Version, data.AuthKey, data.AuthType, data.UserId)
-	}, userAuthIdKey)
-	return ret, err
+func (m *defaultUserAuthModel) Insert(ctx context.Context, data *UserAuth, session sqlx.Session) (sql.Result, error) {
+    // 缓存中要删除的key
+    userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, data.Id)
+    cacheUserAuthUserIdAuthTypePrefix := fmt.Sprintf("%s%v:%v", cacheUserAuthUserIdAuthTypePrefix, data.UserId, data.AuthType)
+    cacheUserAuthAuthTypeAuthKeyPrefix := fmt.Sprintf("%s%v:%v", cacheUserAuthAuthTypeAuthKeyPrefix, data.AuthType, data.AuthKey)
+    ret, e := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+        query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, userAuthRowsExpectAutoSet)
+        if session != nil {
+            return session.ExecCtx(ctx, query, data.DeletedAt, data.Version, data.AuthKey, data.AuthType, data.UserId)
+        }
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Version, data.AuthKey, data.AuthType, data.UserId)
+    }, userAuthIdKey, cacheUserAuthUserIdAuthTypePrefix, cacheUserAuthAuthTypeAuthKeyPrefix)
+    return ret, e
 }
 
 func (m *defaultUserAuthModel) Update(ctx context.Context, data *UserAuth) error {
-	userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, data.Id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userAuthRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Version, data.AuthKey, data.AuthType, data.UserId, data.Id)
-	}, userAuthIdKey)
-	return err
+    userAuthIdKey := fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, data.Id)
+    _, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+        query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userAuthRowsWithPlaceHolder)
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Version, data.AuthKey, data.AuthType, data.UserId, data.Id)
+    }, userAuthIdKey)
+    return err
 }
 
 func (m *defaultUserAuthModel) formatPrimary(primary interface{}) string {
-	return fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, primary)
+    return fmt.Sprintf("%s%v", cacheUserAuthIdPrefix, primary)
 }
 
 func (m *defaultUserAuthModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
-	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userAuthRows, m.table)
-	return conn.QueryRowCtx(ctx, v, query, primary)
+    query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userAuthRows, m.table)
+    return conn.QueryRowCtx(ctx, v, query, primary)
 }
 
 func (m *defaultUserAuthModel) tableName() string {
-	return m.table
+    return m.table
 }
