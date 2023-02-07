@@ -31,7 +31,7 @@ type (
         Insert(ctx context.Context, data *User, session sqlx.Session) (sql.Result, error)
         FindOne(ctx context.Context, id int64) (*User, error)
         Update(ctx context.Context, data *User) error
-        Delete(ctx context.Context, id int64) error
+        Delete(ctx context.Context, id int64, session sqlx.Session) error
     }
 
     defaultUserModel struct {
@@ -61,12 +61,21 @@ func newUserModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultUserModel {
     }
 }
 
-func (m *defaultUserModel) Delete(ctx context.Context, id int64) error {
+func (m *defaultUserModel) Delete(ctx context.Context, id int64, session sqlx.Session) error {
+    // 删除缓存对应的key
+    row, err := m.FindOne(ctx, id)
+    if err != nil {
+        return err
+    }
     userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, id)
-    _, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+    userMobilePrefix := fmt.Sprintf("%s%v", cacheUserMobilePrefix, row.Mobile)
+    _, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
         query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
+        if session != nil {
+            return session.ExecCtx(ctx, query, id)
+        }
         return conn.ExecCtx(ctx, query, id)
-    }, userIdKey)
+    }, userIdKey, userMobilePrefix)
     return err
 }
 
