@@ -15,6 +15,7 @@ func init() {
     // 用户服务
     message[ERROR_CODE_USER_NOT_EXIST] = "用户不存在"
     message[ERROR_CODE_USER_PASSWORD_ERROR] = "账号或密码不正确"
+    message[ERROR_CODE_USER_ALREADY_EXIST] = "用户已注册过"
 
 }
 

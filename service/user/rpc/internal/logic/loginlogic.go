@@ -61,7 +61,7 @@ func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 
 func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
     //   查找用户
-    one, err := l.svcCtx.UserModel.FindOne(l.ctx, 1)
+    one, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, mobile)
     if err != nil && err != model.ErrNotFound {
         return 0, errors.Wrapf(xerr.NewErrCode(xerr.ERROR_CODE_DB_ERROR), "根据手机号查询用户信息失败，mobile:%s,err:%v", mobile, err)
     }
@@ -69,12 +69,12 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
         return 0, errors.Wrapf(ErrUserNoExistsError, "mobile:%s", mobile)
     }
 
-    fmt.Println(tool.ToJsonString(one))
+    fmt.Println("查询结果:", tool.ToJsonString(one))
 
     //   解码比较
-    //if !(tool.Md5ByString(password) == one.Password) {
-    //    return 0, errors.Wrap(ErrUsernamePwdError, "密码匹配出错")
-    //}
+    if !(tool.Md5ByString(password) == one.Password) {
+       return 0, errors.Wrap(ErrUsernamePwdError, "密码匹配出错")
+    }
 
     return one.Id, nil
 }

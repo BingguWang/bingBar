@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/BingguWang/bingBar/common/interceptor/rpcserver"
-
 	"github.com/BingguWang/bingBar/service/user/rpc/internal/config"
 	"github.com/BingguWang/bingBar/service/user/rpc/internal/server"
 	"github.com/BingguWang/bingBar/service/user/rpc/internal/svc"
@@ -33,7 +31,7 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
-	s.AddUnaryInterceptors(rpcserver.LoggerInterceptor)
+	//s.AddUnaryInterceptors(rpcserver.LoggerInterceptor)
 	defer s.Stop()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
