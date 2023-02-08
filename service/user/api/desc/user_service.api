@@ -30,15 +30,19 @@ service UserService {
 	jwt: JwtAuth
 )
 service UserService {
-	@doc "get user info"
+	@doc "获取某用户信息"
 	@handler userDetail
 	post /user/detail (UserInfoReq) returns (UserInfoResp)
 	
-	@doc "follow"
+	@doc "关注"
 	@handler follow
 	post /user/follow (FollowReq) returns (FollowResp)
 	
-	@doc "unfollow"
+	@doc "取关"
 	@handler unfollow
 	post /user/unfollow (UnFollowReq) returns (UnFollowResp)
+	
+	@doc "获取关注列表"
+	@handler getFollowList
+	post /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
 }

@@ -53,6 +53,16 @@ type (
         RetMsg string `json:"retMsg"`
     }
 )
+type (
+    GetFollowListReq {
+        PageNo int64 `json:"pageNo"`
+        PageSize int64 `json:"pageSize"`
+    }
+    GetFollowListResp {
+        RetMsg string `json:"retMsg"`
+        UserList []User `json:"userList"`
+    }
+)
 
 type (
     UserInfoReq {

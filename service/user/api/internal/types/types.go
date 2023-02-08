@@ -48,6 +48,16 @@ type UnFollowResp struct {
 	RetMsg string `json:"retMsg"`
 }
 
+type GetFollowListReq struct {
+	PageNo   int64 `json:"pageNo"`
+	PageSize int64 `json:"pageSize"`
+}
+
+type GetFollowListResp struct {
+	RetMsg   string `json:"retMsg"`
+	UserList []User `json:"userList"`
+}
+
 type UserInfoReq struct {
 }
 
