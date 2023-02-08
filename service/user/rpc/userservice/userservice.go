@@ -13,28 +13,62 @@ import (
 )
 
 type (
-	GenerateTokenReq         = pb.GenerateTokenReq
-	GenerateTokenResp        = pb.GenerateTokenResp
-	GetUserAuthByAuthKeyReq  = pb.GetUserAuthByAuthKeyReq
-	GetUserAuthByAuthKeyResp = pb.GetUserAuthByAuthKeyResp
-	GetUserAuthByUserIdReq   = pb.GetUserAuthByUserIdReq
-	GetUserAuthyUserIdResp   = pb.GetUserAuthyUserIdResp
-	GetUserInfoReq           = pb.GetUserInfoReq
-	GetUserInfoResp          = pb.GetUserInfoResp
-	LoginReq                 = pb.LoginReq
-	LoginResp                = pb.LoginResp
-	RegisterReq              = pb.RegisterReq
-	RegisterResp             = pb.RegisterResp
-	User                     = pb.User
-	UserAuth                 = pb.UserAuth
+	FollowReq                   = pb.FollowReq
+	FollowResp                  = pb.FollowResp
+	GenerateTokenReq            = pb.GenerateTokenReq
+	GenerateTokenResp           = pb.GenerateTokenResp
+	GetFansListByUserIDReq      = pb.GetFansListByUserIDReq
+	GetFansListByUserIDResp     = pb.GetFansListByUserIDResp
+	GetFollowedListByUserIDReq  = pb.GetFollowedListByUserIDReq
+	GetFollowedListByUserIDResp = pb.GetFollowedListByUserIDResp
+	GetFriendListByUserIDReq    = pb.GetFriendListByUserIDReq
+	GetFriendListByUserIDResp   = pb.GetFriendListByUserIDResp
+	GetMutualFollowedReq        = pb.GetMutualFollowedReq
+	GetMutualFollowedResp       = pb.GetMutualFollowedResp
+	GetMutualFriendsReq         = pb.GetMutualFriendsReq
+	GetMutualFriendsResp        = pb.GetMutualFriendsResp
+	GetUserAuthByAuthKeyReq     = pb.GetUserAuthByAuthKeyReq
+	GetUserAuthByAuthKeyResp    = pb.GetUserAuthByAuthKeyResp
+	GetUserAuthByUserIdReq      = pb.GetUserAuthByUserIdReq
+	GetUserAuthyUserIdResp      = pb.GetUserAuthyUserIdResp
+	GetUserInfoReq              = pb.GetUserInfoReq
+	GetUserInfoResp             = pb.GetUserInfoResp
+	LoginReq                    = pb.LoginReq
+	LoginResp                   = pb.LoginResp
+	RegisterReq                 = pb.RegisterReq
+	RegisterResp                = pb.RegisterResp
+	UnFollowReq                 = pb.UnFollowReq
+	UnFollowResp                = pb.UnFollowResp
+	User                        = pb.User
+	UserAuth                    = pb.UserAuth
 
 	UserService interface {
+		// ============================ 用户鉴权 =======================
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 注册
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
+		// 获取某个用户信息
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+		// 获取某个用户平台key
 		GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
+		// 获取某个用户平台key
 		GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
+		// 生成token
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		// ============================ 用户关系 =======================
+		Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error)
+		// 取关对方
+		UnFollow(ctx context.Context, in *UnFollowReq, opts ...grpc.CallOption) (*UnFollowResp, error)
+		// 获取用户好友列表
+		GetFriendListByUserID(ctx context.Context, in *GetFriendListByUserIDReq, opts ...grpc.CallOption) (*GetFriendListByUserIDResp, error)
+		// 获取粉丝列表
+		GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error)
+		// 获取关注列表
+		GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error)
+		// 获取共同好友
+		GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error)
+		// 获取共同关注
+		GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error)
 	}
 
 	defaultUserService struct {
@@ -48,32 +82,80 @@ func NewUserService(cli zrpc.Client) UserService {
 	}
 }
 
+// ============================ 用户鉴权 =======================
 func (m *defaultUserService) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }
 
+// 注册
 func (m *defaultUserService) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
 }
 
+// 获取某个用户信息
 func (m *defaultUserService) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetUserInfo(ctx, in, opts...)
 }
 
+// 获取某个用户平台key
 func (m *defaultUserService) GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetUserAuthByAuthKey(ctx, in, opts...)
 }
 
+// 获取某个用户平台key
 func (m *defaultUserService) GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetUserAuthByUserId(ctx, in, opts...)
 }
 
+// 生成token
 func (m *defaultUserService) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GenerateToken(ctx, in, opts...)
+}
+
+// ============================ 用户关系 =======================
+func (m *defaultUserService) Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.Follow(ctx, in, opts...)
+}
+
+// 取关对方
+func (m *defaultUserService) UnFollow(ctx context.Context, in *UnFollowReq, opts ...grpc.CallOption) (*UnFollowResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.UnFollow(ctx, in, opts...)
+}
+
+// 获取用户好友列表
+func (m *defaultUserService) GetFriendListByUserID(ctx context.Context, in *GetFriendListByUserIDReq, opts ...grpc.CallOption) (*GetFriendListByUserIDResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetFriendListByUserID(ctx, in, opts...)
+}
+
+// 获取粉丝列表
+func (m *defaultUserService) GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetFansListByUserID(ctx, in, opts...)
+}
+
+// 获取关注列表
+func (m *defaultUserService) GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetFollowedListByUserID(ctx, in, opts...)
+}
+
+// 获取共同好友
+func (m *defaultUserService) GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetMutualFriends(ctx, in, opts...)
+}
+
+// 获取共同关注
+func (m *defaultUserService) GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetMutualFollowed(ctx, in, opts...)
 }

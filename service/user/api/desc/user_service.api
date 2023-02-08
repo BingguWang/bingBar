@@ -33,4 +33,12 @@ service UserService {
 	@doc "get user info"
 	@handler userDetail
 	post /user/detail (UserInfoReq) returns (UserInfoResp)
+	
+	@doc "follow"
+	@handler follow
+	post /user/follow (FollowReq) returns (FollowResp)
+	
+	@doc "unfollow"
+	@handler unfollow
+	post /user/unfollow (UnFollowReq) returns (UnFollowResp)
 }

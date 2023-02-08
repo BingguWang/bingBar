@@ -22,12 +22,34 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
+	// ============================ 用户鉴权 =======================
+	// 登录
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 注册
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
+	// 获取某个用户信息
 	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+	// 获取某个用户平台key
 	GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
+	// 获取某个用户平台key
 	GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
+	// 生成token
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	// ============================ 用户关系 =======================
+	// 关注对方
+	Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error)
+	// 取关对方
+	UnFollow(ctx context.Context, in *UnFollowReq, opts ...grpc.CallOption) (*UnFollowResp, error)
+	// 获取用户好友列表
+	GetFriendListByUserID(ctx context.Context, in *GetFriendListByUserIDReq, opts ...grpc.CallOption) (*GetFriendListByUserIDResp, error)
+	// 获取粉丝列表
+	GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error)
+	// 获取关注列表
+	GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error)
+	// 获取共同好友
+	GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error)
+	// 获取共同关注
+	GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error)
 }
 
 type userServiceClient struct {
@@ -92,16 +114,101 @@ func (c *userServiceClient) GenerateToken(ctx context.Context, in *GenerateToken
 	return out, nil
 }
 
+func (c *userServiceClient) Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error) {
+	out := new(FollowResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/follow", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UnFollow(ctx context.Context, in *UnFollowReq, opts ...grpc.CallOption) (*UnFollowResp, error) {
+	out := new(UnFollowResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/unFollow", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetFriendListByUserID(ctx context.Context, in *GetFriendListByUserIDReq, opts ...grpc.CallOption) (*GetFriendListByUserIDResp, error) {
+	out := new(GetFriendListByUserIDResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getFriendListByUserID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error) {
+	out := new(GetFansListByUserIDResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getFansListByUserID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error) {
+	out := new(GetFollowedListByUserIDResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getFollowedListByUserID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error) {
+	out := new(GetMutualFriendsResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getMutualFriends", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error) {
+	out := new(GetMutualFollowedResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getMutualFollowed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
+	// ============================ 用户鉴权 =======================
+	// 登录
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	// 注册
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
+	// 获取某个用户信息
 	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
+	// 获取某个用户平台key
 	GetUserAuthByAuthKey(context.Context, *GetUserAuthByAuthKeyReq) (*GetUserAuthByAuthKeyResp, error)
+	// 获取某个用户平台key
 	GetUserAuthByUserId(context.Context, *GetUserAuthByUserIdReq) (*GetUserAuthyUserIdResp, error)
+	// 生成token
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	// ============================ 用户关系 =======================
+	// 关注对方
+	Follow(context.Context, *FollowReq) (*FollowResp, error)
+	// 取关对方
+	UnFollow(context.Context, *UnFollowReq) (*UnFollowResp, error)
+	// 获取用户好友列表
+	GetFriendListByUserID(context.Context, *GetFriendListByUserIDReq) (*GetFriendListByUserIDResp, error)
+	// 获取粉丝列表
+	GetFansListByUserID(context.Context, *GetFansListByUserIDReq) (*GetFansListByUserIDResp, error)
+	// 获取关注列表
+	GetFollowedListByUserID(context.Context, *GetFollowedListByUserIDReq) (*GetFollowedListByUserIDResp, error)
+	// 获取共同好友
+	GetMutualFriends(context.Context, *GetMutualFriendsReq) (*GetMutualFriendsResp, error)
+	// 获取共同关注
+	GetMutualFollowed(context.Context, *GetMutualFollowedReq) (*GetMutualFollowedResp, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -126,6 +233,27 @@ func (UnimplementedUserServiceServer) GetUserAuthByUserId(context.Context, *GetU
 }
 func (UnimplementedUserServiceServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedUserServiceServer) Follow(context.Context, *FollowReq) (*FollowResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Follow not implemented")
+}
+func (UnimplementedUserServiceServer) UnFollow(context.Context, *UnFollowReq) (*UnFollowResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnFollow not implemented")
+}
+func (UnimplementedUserServiceServer) GetFriendListByUserID(context.Context, *GetFriendListByUserIDReq) (*GetFriendListByUserIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFriendListByUserID not implemented")
+}
+func (UnimplementedUserServiceServer) GetFansListByUserID(context.Context, *GetFansListByUserIDReq) (*GetFansListByUserIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFansListByUserID not implemented")
+}
+func (UnimplementedUserServiceServer) GetFollowedListByUserID(context.Context, *GetFollowedListByUserIDReq) (*GetFollowedListByUserIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFollowedListByUserID not implemented")
+}
+func (UnimplementedUserServiceServer) GetMutualFriends(context.Context, *GetMutualFriendsReq) (*GetMutualFriendsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMutualFriends not implemented")
+}
+func (UnimplementedUserServiceServer) GetMutualFollowed(context.Context, *GetMutualFollowedReq) (*GetMutualFollowedResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMutualFollowed not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -248,6 +376,132 @@ func _UserService_GenerateToken_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_Follow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FollowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Follow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/follow",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Follow(ctx, req.(*FollowReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UnFollow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnFollowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UnFollow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/unFollow",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UnFollow(ctx, req.(*UnFollowReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetFriendListByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFriendListByUserIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetFriendListByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getFriendListByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetFriendListByUserID(ctx, req.(*GetFriendListByUserIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetFansListByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFansListByUserIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetFansListByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getFansListByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetFansListByUserID(ctx, req.(*GetFansListByUserIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetFollowedListByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFollowedListByUserIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetFollowedListByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getFollowedListByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetFollowedListByUserID(ctx, req.(*GetFollowedListByUserIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetMutualFriends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMutualFriendsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetMutualFriends(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getMutualFriends",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetMutualFriends(ctx, req.(*GetMutualFriendsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetMutualFollowed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMutualFollowedReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetMutualFollowed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getMutualFollowed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetMutualFollowed(ctx, req.(*GetMutualFollowedReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +532,34 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "generateToken",
 			Handler:    _UserService_GenerateToken_Handler,
+		},
+		{
+			MethodName: "follow",
+			Handler:    _UserService_Follow_Handler,
+		},
+		{
+			MethodName: "unFollow",
+			Handler:    _UserService_UnFollow_Handler,
+		},
+		{
+			MethodName: "getFriendListByUserID",
+			Handler:    _UserService_GetFriendListByUserID_Handler,
+		},
+		{
+			MethodName: "getFansListByUserID",
+			Handler:    _UserService_GetFansListByUserID_Handler,
+		},
+		{
+			MethodName: "getFollowedListByUserID",
+			Handler:    _UserService_GetFollowedListByUserID_Handler,
+		},
+		{
+			MethodName: "getMutualFriends",
+			Handler:    _UserService_GetMutualFriends_Handler,
+		},
+		{
+			MethodName: "getMutualFollowed",
+			Handler:    _UserService_GetMutualFollowed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

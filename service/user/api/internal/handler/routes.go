@@ -34,6 +34,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/detail",
 				Handler: user.UserDetailHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/follow",
+				Handler: user.FollowHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/unfollow",
+				Handler: user.UnfollowHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/usercenter/v1"),

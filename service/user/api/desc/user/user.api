@@ -6,38 +6,53 @@ info(
 )
 
 type User {
-    Id       int64  `json:"id"`
-    Mobile   string `json:"mobile"`
+    Id int64 `json:"id"`
+    Mobile string `json:"mobile"`
     Nickname string `json:"nickname"`
-    Sex      int64  `json:"sex"`
-    Avatar   string `json:"avatar"`
-    Info     string `json:"info"`
+    Sex int64 `json:"sex"`
+    Avatar string `json:"avatar"`
+    Info string `json:"info"`
 }
 
 type (
     RegisterReq {
-        Mobile   string `json:"mobile"`
+        Mobile string `json:"mobile"`
         Password string `json:"password"`
     }
     RegisterResp {
-        AccessToken  string `json:"accessToken"`
-        AccessExpire int64  `json:"accessExpire"`
-        RefreshAfter int64  `json:"refreshAfter"`
+        AccessToken string `json:"accessToken"`
+        AccessExpire int64 `json:"accessExpire"`
+        RefreshAfter int64 `json:"refreshAfter"`
     }
 )
 
 type (
     LoginReq {
-        Mobile   string `json:"mobile"`
+        Mobile string `json:"mobile"`
         Password string `json:"password"`
     }
     LoginResp {
-        AccessToken  string `json:"accessToken"`
-        AccessExpire int64  `json:"accessExpire"`
-        RefreshAfter int64  `json:"refreshAfter"`
+        AccessToken string `json:"accessToken"`
+        AccessExpire int64 `json:"accessExpire"`
+        RefreshAfter int64 `json:"refreshAfter"`
     }
 )
-
+type (
+    FollowReq {
+        Uid int64 `json:"uid"`
+    }
+    FollowResp {
+        RetMsg string `json:"retMsg"`
+    }
+)
+type (
+    UnFollowReq {
+        Uid int64 `json:"uid"`
+    }
+    UnFollowResp {
+        RetMsg string `json:"retMsg"`
+    }
+)
 
 type (
     UserInfoReq {

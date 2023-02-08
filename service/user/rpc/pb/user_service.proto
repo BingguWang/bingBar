@@ -9,7 +9,7 @@ package pb;
 message User {
   int64 id = 1;
   string mobile = 2;
-  string nickname =3;
+  string nickname = 3;
   int64  sex = 4;
   string avatar = 5;
   string info = 6;
@@ -22,6 +22,42 @@ message UserAuth {
   string authKey = 4;
 }
 
+
+//service
+service UserService {
+  // ============================ 用户鉴权 =======================
+  // 登录
+  rpc login(LoginReq) returns(LoginResp);
+  // 注册
+  rpc register(RegisterReq) returns(RegisterResp);
+  // 获取某个用户信息
+  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
+  // 获取某个用户平台key
+  rpc getUserAuthByAuthKey(GetUserAuthByAuthKeyReq) returns(GetUserAuthByAuthKeyResp);
+  // 获取某个用户平台key
+  rpc getUserAuthByUserId(GetUserAuthByUserIdReq) returns(GetUserAuthyUserIdResp);
+  // 生成token
+  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
+
+  // ============================ 用户关系 =======================
+  // 关注对方
+  rpc follow(FollowReq) returns(FollowResp);
+  // 取关对方
+  rpc unFollow(UnFollowReq) returns(UnFollowResp);
+  // 获取用户好友列表
+  rpc getFriendListByUserID(GetFriendListByUserIDReq) returns(GetFriendListByUserIDResp);
+  // 获取粉丝列表
+  rpc getFansListByUserID(GetFansListByUserIDReq) returns(GetFansListByUserIDResp);
+  // 获取关注列表
+  rpc getFollowedListByUserID(GetFollowedListByUserIDReq) returns(GetFollowedListByUserIDResp);
+  // 获取共同好友
+  rpc getMutualFriends(GetMutualFriendsReq) returns(GetMutualFriendsResp);
+  // 获取共同关注
+  rpc getMutualFollowed(GetMutualFollowedReq) returns(GetMutualFollowedResp);
+
+}
+
+// ================================ 用户鉴权 ====================================
 
 //req 、resp
 message RegisterReq {
@@ -80,12 +116,56 @@ message GenerateTokenResp {
   int64  refreshAfter = 3;
 }
 
-//service
-service UserService {
-  rpc login(LoginReq) returns(LoginResp);
-  rpc register(RegisterReq) returns(RegisterResp);
-  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
-  rpc getUserAuthByAuthKey(GetUserAuthByAuthKeyReq) returns(GetUserAuthByAuthKeyResp);
-  rpc getUserAuthByUserId(GetUserAuthByUserIdReq) returns(GetUserAuthyUserIdResp);
-  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
+// ================================ 用户关系 ====================================
+message GetMutualFollowedResp {
+  repeated int64  mutualFollowedList = 1;
+}
+message GetMutualFollowedReq {
+  repeated int64  userIds = 1;
+}
+message GetMutualFriendsReq {
+  repeated int64  userIds = 1;
+}
+message GetMutualFriendsResp {
+  repeated User mutualFriendList = 1;
+}
+message GetFollowedListByUserIDReq {
+  int64  userId = 1;
+}
+message GetFollowedListByUserIDResp {
+  repeated User followedList = 1;
+}
+message GetFriendListByUserIDReq {
+  int64  userId = 1;
+}
+message GetFriendListByUserIDResp {
+  repeated User friendList = 1;
+}
+
+message GetFansListByUserIDReq {
+  int64  userId = 1;
+}
+message GetFansListByUserIDResp {
+  repeated User FansList = 1;
+}
+
+message FollowReq {
+  int64   userId = 1;
+  int64   followBy = 2;
+  string  authKey = 3;
+  string  authType = 4;
+}
+message UnFollowReq {
+  int64 userId = 1;
+  int64 followBy = 2;
+  string  authKey = 3;
+  string  authType = 4;
+}
+message FollowResp {
+  string retMsg = 1;
+  uint32 retCode = 2;
+}
+message UnFollowResp {
+  string retMsg = 1;
+  uint32 retCode = 2;
 }

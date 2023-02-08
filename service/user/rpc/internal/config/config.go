@@ -15,4 +15,9 @@ type Config struct {
         DataSource string
     }
     Cache cache.CacheConf // 缓存，数据库查询的时候会缓存到Redis里
+    Redis struct {
+        Password string
+        Type     string
+        Host     string
+    }
 }

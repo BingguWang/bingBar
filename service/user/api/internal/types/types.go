@@ -32,6 +32,22 @@ type LoginResp struct {
 	RefreshAfter int64  `json:"refreshAfter"`
 }
 
+type FollowReq struct {
+	Uid int64 `json:"uid"`
+}
+
+type FollowResp struct {
+	RetMsg string `json:"retMsg"`
+}
+
+type UnFollowReq struct {
+	Uid int64 `json:"uid"`
+}
+
+type UnFollowResp struct {
+	RetMsg string `json:"retMsg"`
+}
+
 type UserInfoReq struct {
 }
 

@@ -22,32 +22,80 @@ func NewUserServiceServer(svcCtx *svc.ServiceContext) *UserServiceServer {
 	}
 }
 
+// ============================ 用户鉴权 =======================
 func (s *UserServiceServer) Login(ctx context.Context, in *pb.LoginReq) (*pb.LoginResp, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
 
+// 注册
 func (s *UserServiceServer) Register(ctx context.Context, in *pb.RegisterReq) (*pb.RegisterResp, error) {
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
 }
 
+// 获取某个用户信息
 func (s *UserServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }
 
+// 获取某个用户平台key
 func (s *UserServiceServer) GetUserAuthByAuthKey(ctx context.Context, in *pb.GetUserAuthByAuthKeyReq) (*pb.GetUserAuthByAuthKeyResp, error) {
 	l := logic.NewGetUserAuthByAuthKeyLogic(ctx, s.svcCtx)
 	return l.GetUserAuthByAuthKey(in)
 }
 
+// 获取某个用户平台key
 func (s *UserServiceServer) GetUserAuthByUserId(ctx context.Context, in *pb.GetUserAuthByUserIdReq) (*pb.GetUserAuthyUserIdResp, error) {
 	l := logic.NewGetUserAuthByUserIdLogic(ctx, s.svcCtx)
 	return l.GetUserAuthByUserId(in)
 }
 
+// 生成token
 func (s *UserServiceServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
 	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
 	return l.GenerateToken(in)
+}
+
+// ============================ 用户关系 =======================
+func (s *UserServiceServer) Follow(ctx context.Context, in *pb.FollowReq) (*pb.FollowResp, error) {
+	l := logic.NewFollowLogic(ctx, s.svcCtx)
+	return l.Follow(in)
+}
+
+// 取关对方
+func (s *UserServiceServer) UnFollow(ctx context.Context, in *pb.UnFollowReq) (*pb.UnFollowResp, error) {
+	l := logic.NewUnFollowLogic(ctx, s.svcCtx)
+	return l.UnFollow(in)
+}
+
+// 获取用户好友列表
+func (s *UserServiceServer) GetFriendListByUserID(ctx context.Context, in *pb.GetFriendListByUserIDReq) (*pb.GetFriendListByUserIDResp, error) {
+	l := logic.NewGetFriendListByUserIDLogic(ctx, s.svcCtx)
+	return l.GetFriendListByUserID(in)
+}
+
+// 获取粉丝列表
+func (s *UserServiceServer) GetFansListByUserID(ctx context.Context, in *pb.GetFansListByUserIDReq) (*pb.GetFansListByUserIDResp, error) {
+	l := logic.NewGetFansListByUserIDLogic(ctx, s.svcCtx)
+	return l.GetFansListByUserID(in)
+}
+
+// 获取关注列表
+func (s *UserServiceServer) GetFollowedListByUserID(ctx context.Context, in *pb.GetFollowedListByUserIDReq) (*pb.GetFollowedListByUserIDResp, error) {
+	l := logic.NewGetFollowedListByUserIDLogic(ctx, s.svcCtx)
+	return l.GetFollowedListByUserID(in)
+}
+
+// 获取共同好友
+func (s *UserServiceServer) GetMutualFriends(ctx context.Context, in *pb.GetMutualFriendsReq) (*pb.GetMutualFriendsResp, error) {
+	l := logic.NewGetMutualFriendsLogic(ctx, s.svcCtx)
+	return l.GetMutualFriends(in)
+}
+
+// 获取共同关注
+func (s *UserServiceServer) GetMutualFollowed(ctx context.Context, in *pb.GetMutualFollowedReq) (*pb.GetMutualFollowedResp, error) {
+	l := logic.NewGetMutualFollowedLogic(ctx, s.svcCtx)
+	return l.GetMutualFollowed(in)
 }
