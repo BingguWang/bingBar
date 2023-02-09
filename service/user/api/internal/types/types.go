@@ -68,6 +68,16 @@ type GetFansListResp struct {
 	UserList []User `json:"userList"`
 }
 
+type GetFriendListReq struct {
+	PageNo   int64 `json:"pageNo"`
+	PageSize int64 `json:"pageSize"`
+}
+
+type GetFriendListResp struct {
+	RetMsg   string `json:"retMsg"`
+	UserList []User `json:"userList"`
+}
+
 type UserInfoReq struct {
 }
 

@@ -49,4 +49,8 @@ service UserService {
 	@doc "获取粉丝列表"
 	@handler getFansList
 	get /user/getFansList (GetFansListReq) returns (GetFansListResp)
+	
+	@doc "获取好友列表"
+	@handler getFriendList
+	get /user/getFriendList (GetFriendListReq) returns (GetFriendListResp)
 }

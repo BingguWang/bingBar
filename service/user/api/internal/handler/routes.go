@@ -54,6 +54,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/getFansList",
 				Handler: user.GetFansListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/getFriendList",
+				Handler: user.GetFriendListHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/usercenter/v1"),

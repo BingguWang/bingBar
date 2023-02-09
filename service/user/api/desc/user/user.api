@@ -75,6 +75,16 @@ type (
     }
 )
 
+type (
+    GetFriendListReq {
+        PageNo int64 `json:"pageNo"`
+        PageSize int64 `json:"pageSize"`
+    }
+    GetFriendListResp {
+        RetMsg string `json:"retMsg"`
+        UserList []User `json:"userList"`
+    }
+)
 
 type (
     UserInfoReq {
