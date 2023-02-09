@@ -88,7 +88,7 @@ func (s *UserServiceServer) GetFollowedListByUserID(ctx context.Context, in *pb.
 	return l.GetFollowedListByUserID(in)
 }
 
-// 获取共同好友
+// 获取传入的所有用户之间的共同好友
 func (s *UserServiceServer) GetMutualFriends(ctx context.Context, in *pb.GetMutualFriendsReq) (*pb.GetMutualFriendsResp, error) {
 	l := logic.NewGetMutualFriendsLogic(ctx, s.svcCtx)
 	return l.GetMutualFriends(in)

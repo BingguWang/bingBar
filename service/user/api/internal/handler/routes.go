@@ -64,6 +64,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/getMutualFollowList",
 				Handler: user.GetMutualFollowListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/getMutualFriendList",
+				Handler: user.GetMutualFriendListHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/usercenter/v1"),

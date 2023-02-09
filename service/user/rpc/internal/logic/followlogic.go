@@ -73,7 +73,7 @@ func (l *FollowLogic) Follow(in *pb.FollowReq) (*pb.FollowResp, error) {
     if r1 && r2 && r3 && r4 {
         logx.Infof("他们是好友关系:%v :%v", in.FollowBy, in.UserId)
         UserFriendSetPrefixKey1 := fmt.Sprintf("%s%v", UserFriendSetPrefix, in.FollowBy)
-        _, err = l.svcCtx.Redis.SaddCtx(l.ctx, UserFriendSetPrefixKey1, in.FollowBy)
+        _, err = l.svcCtx.Redis.SaddCtx(l.ctx, UserFriendSetPrefixKey1, in.UserId)
         if err != nil {
             return nil, errors.Wrapf(xerr.NewErrCode(xerr.ERROR_CODE_SADD_FAILED), "redis sadd faied ,key : %v , err : %s", UserFriendSetPrefixKey1, err.Error())
         }

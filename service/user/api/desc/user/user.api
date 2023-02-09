@@ -94,6 +94,19 @@ type (
     GetMutualFollowListResp {
         RetMsg string `json:"retMsg"`
         UserList []User `json:"userList"`
+        Total int64 `json:"total"`
+    }
+)
+
+type (
+    GetMutualFriendListReq {
+        Uid int64 `json:"uid"`
+        PageSize int64 `json:"pageSize"`
+    }
+    GetMutualFriendListResp {
+        RetMsg string `json:"retMsg"`
+        UserList []User `json:"userList"`
+        Total int64 `json:"total"`
     }
 )
 

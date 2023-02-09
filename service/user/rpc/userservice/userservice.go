@@ -65,7 +65,7 @@ type (
 		GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error)
 		// 获取关注列表
 		GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error)
-		// 获取共同好友
+		// 获取传入的所有用户之间的共同好友
 		GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error)
 		// 获取共同关注
 		GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error)
@@ -148,7 +148,7 @@ func (m *defaultUserService) GetFollowedListByUserID(ctx context.Context, in *Ge
 	return client.GetFollowedListByUserID(ctx, in, opts...)
 }
 
-// 获取共同好友
+// 获取传入的所有用户之间的共同好友
 func (m *defaultUserService) GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetMutualFriends(ctx, in, opts...)

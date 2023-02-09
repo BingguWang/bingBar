@@ -50,7 +50,7 @@ service UserService {
   rpc getFansListByUserID(GetFansListByUserIDReq) returns(GetFansListByUserIDResp);
   // 获取关注列表
   rpc getFollowedListByUserID(GetFollowedListByUserIDReq) returns(GetFollowedListByUserIDResp);
-  // 获取共同好友
+  // 获取传入的所有用户之间的共同好友
   rpc getMutualFriends(GetMutualFriendsReq) returns(GetMutualFriendsResp);
   // 获取共同关注
   rpc getMutualFollowed(GetMutualFollowedReq) returns(GetMutualFollowedResp);
@@ -119,6 +119,7 @@ message GenerateTokenResp {
 // ================================ 用户关系 ====================================
 message GetMutualFollowedResp {
   repeated User  userList = 1;
+  int64 total = 2;
 }
 message GetMutualFollowedReq {
   int64  userId = 1;
@@ -131,6 +132,7 @@ message GetMutualFriendsReq {
 }
 message GetMutualFriendsResp {
   repeated User userList = 1;
+  int64 total = 2;
 }
 message GetFollowedListByUserIDReq {
   int64 userId = 1;

@@ -43,6 +43,7 @@ func (l *GetMutualFollowedLogic) GetMutualFollowed(in *pb.GetMutualFollowedReq) 
         length = int(in.PageSize)
     }
     resp := &pb.GetMutualFollowedResp{UserList: make([]*pb.User, length)}
+    resp.Total = int64(len(mutualIds))
     var wg sync.WaitGroup
     for i := 0; i < len(mutualIds); i++ {
         wg.Add(1)

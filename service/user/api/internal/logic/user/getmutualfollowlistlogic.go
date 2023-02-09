@@ -44,5 +44,6 @@ func (l *GetMutualFollowListLogic) GetMutualFollowList(req *types.GetMutualFollo
     }
     var resp types.GetMutualFollowListResp
     _ = copier.Copy(&resp.UserList, ret.GetUserList())
+    resp.Total = ret.GetTotal()
     return &resp, nil
 }

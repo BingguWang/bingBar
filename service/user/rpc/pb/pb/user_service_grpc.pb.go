@@ -46,7 +46,7 @@ type UserServiceClient interface {
 	GetFansListByUserID(ctx context.Context, in *GetFansListByUserIDReq, opts ...grpc.CallOption) (*GetFansListByUserIDResp, error)
 	// 获取关注列表
 	GetFollowedListByUserID(ctx context.Context, in *GetFollowedListByUserIDReq, opts ...grpc.CallOption) (*GetFollowedListByUserIDResp, error)
-	// 获取共同好友
+	// 获取传入的所有用户之间的共同好友
 	GetMutualFriends(ctx context.Context, in *GetMutualFriendsReq, opts ...grpc.CallOption) (*GetMutualFriendsResp, error)
 	// 获取共同关注
 	GetMutualFollowed(ctx context.Context, in *GetMutualFollowedReq, opts ...grpc.CallOption) (*GetMutualFollowedResp, error)
@@ -205,7 +205,7 @@ type UserServiceServer interface {
 	GetFansListByUserID(context.Context, *GetFansListByUserIDReq) (*GetFansListByUserIDResp, error)
 	// 获取关注列表
 	GetFollowedListByUserID(context.Context, *GetFollowedListByUserIDReq) (*GetFollowedListByUserIDResp, error)
-	// 获取共同好友
+	// 获取传入的所有用户之间的共同好友
 	GetMutualFriends(context.Context, *GetMutualFriendsReq) (*GetMutualFriendsResp, error)
 	// 获取共同关注
 	GetMutualFollowed(context.Context, *GetMutualFollowedReq) (*GetMutualFollowedResp, error)
