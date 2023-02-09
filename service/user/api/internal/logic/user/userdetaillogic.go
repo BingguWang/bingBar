@@ -2,6 +2,9 @@ package user
 
 import (
     "context"
+    "github.com/BingguWang/bingBar/common/ctxdata"
+    "github.com/BingguWang/bingBar/service/user/rpc/pb/pb"
+    "github.com/jinzhu/copier"
 
     "github.com/BingguWang/bingBar/service/user/api/internal/svc"
     "github.com/BingguWang/bingBar/service/user/api/internal/types"
@@ -23,8 +26,13 @@ func NewUserDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserDe
     }
 }
 
-func (l *UserDetailLogic) UserDetail(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-    // todo: add your logic here and delete this line
-
-    return
+func (l *UserDetailLogic) UserDetail(req *types.UserInfoReq) (*types.UserInfoResp, error) {
+    uid := ctxdata.GetUidFromCtx(l.ctx)
+    info, err := l.svcCtx.UserServiceRpc.GetUserInfo(l.ctx, &pb.GetUserInfoReq{Id: uid})
+    if err != nil {
+        return nil, err
+    }
+    var resp types.UserInfoResp
+    _ = copier.Copy(&resp.UserInfo, info.GetUser())
+    return &resp, nil
 }

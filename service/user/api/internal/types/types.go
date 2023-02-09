@@ -8,6 +8,7 @@ type User struct {
 	Sex      int64  `json:"sex"`
 	Avatar   string `json:"avatar"`
 	Info     string `json:"info"`
+	Location string `json:"location"`
 }
 
 type RegisterReq struct {
@@ -98,6 +99,19 @@ type GetMutualFriendListResp struct {
 	RetMsg   string `json:"retMsg"`
 	UserList []User `json:"userList"`
 	Total    int64  `json:"total"`
+}
+
+type EditUserReq struct {
+	Mobile   string `json:"mobile"`
+	Nickname string `json:"nickname"`
+	Sex      int64  `json:"sex"`
+	Avatar   string `json:"avatar"`
+	Info     string `json:"info"`
+	Location string `json:"location"`
+}
+
+type EditUserResp struct {
+	RetMsg string `json:"retMsg"`
 }
 
 type UserInfoReq struct {

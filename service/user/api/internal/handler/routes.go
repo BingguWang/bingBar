@@ -36,6 +36,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/user/editUser",
+				Handler: user.EditUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/user/follow",
 				Handler: user.FollowHandler(serverCtx),
 			},

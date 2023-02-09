@@ -40,17 +40,17 @@ type (
     }
 
     User struct {
-        Id        int64         `db:"id"`
-        CreatedAt time.Time     `db:"created_at"`
-        UpdatedAt time.Time     `db:"updated_at"`
-        DeletedAt sql.NullTime  `db:"deleted_at"`
-        Mobile    string        `db:"mobile"` // 手机号
-        Sex       sql.NullInt64 `db:"sex"`
-        Version   int64         `db:"version"`
-        Password  string        `db:"password"`  // 密码
-        NickName  string        `db:"nick_name"` // 昵称
-        Info      string        `db:"info"`      // info
-        Avatar    string        `db:"avatar"`    // 头像
+        Id        int64        `db:"id"`
+        CreatedAt time.Time    `db:"created_at"`
+        UpdatedAt time.Time    `db:"updated_at"`
+        DeletedAt sql.NullTime `db:"deleted_at"`
+        Mobile    string       `db:"mobile"` // 手机号
+        Sex       int64        `db:"sex"`
+        Version   int64        `db:"version"`
+        Password  string       `db:"password"`                    // 密码
+        Nickname  string       `db:"nick_name"` // 昵称
+        Info      string       `db:"info"`                        // info
+        Avatar    string       `db:"avatar"`                      // 头像
     }
 )
 
@@ -103,9 +103,9 @@ func (m *defaultUserModel) Insert(ctx context.Context, data *User, session sqlx.
     return m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
         query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
         if session != nil {
-            return session.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.NickName, data.Info, data.Avatar)
+            return session.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar)
         }
-        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.NickName, data.Info, data.Avatar)
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar)
     }, userIdKey, userMobileKay)
 }
 
@@ -113,7 +113,7 @@ func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
     userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, data.Id)
     _, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
         query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.NickName, data.Info, data.Avatar, data.Id)
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Id)
     }, userIdKey)
     return err
 }
