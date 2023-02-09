@@ -27,14 +27,16 @@ type UserServiceClient interface {
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	// 注册
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
-	// 获取某个用户信息
-	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 	// 获取某个用户平台key
 	GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
 	// 获取某个用户平台key
 	GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
 	// 生成token
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	// 获取某个用户信息
+	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+	// 修改用户信息
+	EditUserInfo(ctx context.Context, in *EditUserInfoReq, opts ...grpc.CallOption) (*EditUserInfoResp, error)
 	// ============================ 用户关系 =======================
 	// 关注对方
 	Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error)
@@ -78,15 +80,6 @@ func (c *userServiceClient) Register(ctx context.Context, in *RegisterReq, opts 
 	return out, nil
 }
 
-func (c *userServiceClient) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
-	out := new(GetUserInfoResp)
-	err := c.cc.Invoke(ctx, "/pb.UserService/getUserInfo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userServiceClient) GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error) {
 	out := new(GetUserAuthByAuthKeyResp)
 	err := c.cc.Invoke(ctx, "/pb.UserService/getUserAuthByAuthKey", in, out, opts...)
@@ -108,6 +101,24 @@ func (c *userServiceClient) GetUserAuthByUserId(ctx context.Context, in *GetUser
 func (c *userServiceClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
 	out := new(GenerateTokenResp)
 	err := c.cc.Invoke(ctx, "/pb.UserService/generateToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	out := new(GetUserInfoResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/getUserInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) EditUserInfo(ctx context.Context, in *EditUserInfoReq, opts ...grpc.CallOption) (*EditUserInfoResp, error) {
+	out := new(EditUserInfoResp)
+	err := c.cc.Invoke(ctx, "/pb.UserService/editUserInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -186,14 +197,16 @@ type UserServiceServer interface {
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	// 注册
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
-	// 获取某个用户信息
-	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
 	// 获取某个用户平台key
 	GetUserAuthByAuthKey(context.Context, *GetUserAuthByAuthKeyReq) (*GetUserAuthByAuthKeyResp, error)
 	// 获取某个用户平台key
 	GetUserAuthByUserId(context.Context, *GetUserAuthByUserIdReq) (*GetUserAuthyUserIdResp, error)
 	// 生成token
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	// 获取某个用户信息
+	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
+	// 修改用户信息
+	EditUserInfo(context.Context, *EditUserInfoReq) (*EditUserInfoResp, error)
 	// ============================ 用户关系 =======================
 	// 关注对方
 	Follow(context.Context, *FollowReq) (*FollowResp, error)
@@ -222,9 +235,6 @@ func (UnimplementedUserServiceServer) Login(context.Context, *LoginReq) (*LoginR
 func (UnimplementedUserServiceServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedUserServiceServer) GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
-}
 func (UnimplementedUserServiceServer) GetUserAuthByAuthKey(context.Context, *GetUserAuthByAuthKeyReq) (*GetUserAuthByAuthKeyResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserAuthByAuthKey not implemented")
 }
@@ -233,6 +243,12 @@ func (UnimplementedUserServiceServer) GetUserAuthByUserId(context.Context, *GetU
 }
 func (UnimplementedUserServiceServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedUserServiceServer) EditUserInfo(context.Context, *EditUserInfoReq) (*EditUserInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditUserInfo not implemented")
 }
 func (UnimplementedUserServiceServer) Follow(context.Context, *FollowReq) (*FollowResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Follow not implemented")
@@ -304,24 +320,6 @@ func _UserService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserInfoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).GetUserInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/pb.UserService/getUserInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetUserInfo(ctx, req.(*GetUserInfoReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _UserService_GetUserAuthByAuthKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserAuthByAuthKeyReq)
 	if err := dec(in); err != nil {
@@ -372,6 +370,42 @@ func _UserService_GenerateToken_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GenerateToken(ctx, req.(*GenerateTokenReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/getUserInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserInfo(ctx, req.(*GetUserInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_EditUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).EditUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.UserService/editUserInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).EditUserInfo(ctx, req.(*EditUserInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -518,10 +552,6 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_Register_Handler,
 		},
 		{
-			MethodName: "getUserInfo",
-			Handler:    _UserService_GetUserInfo_Handler,
-		},
-		{
 			MethodName: "getUserAuthByAuthKey",
 			Handler:    _UserService_GetUserAuthByAuthKey_Handler,
 		},
@@ -532,6 +562,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "generateToken",
 			Handler:    _UserService_GenerateToken_Handler,
+		},
+		{
+			MethodName: "getUserInfo",
+			Handler:    _UserService_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "editUserInfo",
+			Handler:    _UserService_EditUserInfo_Handler,
 		},
 		{
 			MethodName: "follow",

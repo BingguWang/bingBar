@@ -13,6 +13,8 @@ import (
 )
 
 type (
+	EditUserInfoReq             = pb.EditUserInfoReq
+	EditUserInfoResp            = pb.EditUserInfoResp
 	FollowReq                   = pb.FollowReq
 	FollowResp                  = pb.FollowResp
 	GenerateTokenReq            = pb.GenerateTokenReq
@@ -47,14 +49,16 @@ type (
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		// 注册
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
-		// 获取某个用户信息
-		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 		// 获取某个用户平台key
 		GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
 		// 获取某个用户平台key
 		GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
 		// 生成token
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		// 获取某个用户信息
+		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+		// 修改用户信息
+		EditUserInfo(ctx context.Context, in *EditUserInfoReq, opts ...grpc.CallOption) (*EditUserInfoResp, error)
 		// ============================ 用户关系 =======================
 		Follow(ctx context.Context, in *FollowReq, opts ...grpc.CallOption) (*FollowResp, error)
 		// 取关对方
@@ -94,12 +98,6 @@ func (m *defaultUserService) Register(ctx context.Context, in *RegisterReq, opts
 	return client.Register(ctx, in, opts...)
 }
 
-// 获取某个用户信息
-func (m *defaultUserService) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
-	client := pb.NewUserServiceClient(m.cli.Conn())
-	return client.GetUserInfo(ctx, in, opts...)
-}
-
 // 获取某个用户平台key
 func (m *defaultUserService) GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
@@ -116,6 +114,18 @@ func (m *defaultUserService) GetUserAuthByUserId(ctx context.Context, in *GetUse
 func (m *defaultUserService) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GenerateToken(ctx, in, opts...)
+}
+
+// 获取某个用户信息
+func (m *defaultUserService) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.GetUserInfo(ctx, in, opts...)
+}
+
+// 修改用户信息
+func (m *defaultUserService) EditUserInfo(ctx context.Context, in *EditUserInfoReq, opts ...grpc.CallOption) (*EditUserInfoResp, error) {
+	client := pb.NewUserServiceClient(m.cli.Conn())
+	return client.EditUserInfo(ctx, in, opts...)
 }
 
 // ============================ 用户关系 =======================

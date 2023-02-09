@@ -102,7 +102,6 @@ type GetMutualFriendListResp struct {
 }
 
 type EditUserReq struct {
-	Mobile   string `json:"mobile"`
 	Nickname string `json:"nickname"`
 	Sex      int64  `json:"sex"`
 	Avatar   string `json:"avatar"`

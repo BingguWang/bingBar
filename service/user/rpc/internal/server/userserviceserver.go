@@ -34,12 +34,6 @@ func (s *UserServiceServer) Register(ctx context.Context, in *pb.RegisterReq) (*
 	return l.Register(in)
 }
 
-// 获取某个用户信息
-func (s *UserServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
-	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
-	return l.GetUserInfo(in)
-}
-
 // 获取某个用户平台key
 func (s *UserServiceServer) GetUserAuthByAuthKey(ctx context.Context, in *pb.GetUserAuthByAuthKeyReq) (*pb.GetUserAuthByAuthKeyResp, error) {
 	l := logic.NewGetUserAuthByAuthKeyLogic(ctx, s.svcCtx)
@@ -56,6 +50,18 @@ func (s *UserServiceServer) GetUserAuthByUserId(ctx context.Context, in *pb.GetU
 func (s *UserServiceServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
 	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
 	return l.GenerateToken(in)
+}
+
+// 获取某个用户信息
+func (s *UserServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
+	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
+	return l.GetUserInfo(in)
+}
+
+// 修改用户信息
+func (s *UserServiceServer) EditUserInfo(ctx context.Context, in *pb.EditUserInfoReq) (*pb.EditUserInfoResp, error) {
+	l := logic.NewEditUserInfoLogic(ctx, s.svcCtx)
+	return l.EditUserInfo(in)
 }
 
 // ============================ 用户关系 =======================

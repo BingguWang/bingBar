@@ -30,7 +30,7 @@ type (
     userModel interface {
         Insert(ctx context.Context, data *User, session sqlx.Session) (sql.Result, error)
         FindOne(ctx context.Context, id int64) (*User, error)
-        Update(ctx context.Context, data *User) error
+        Update(ctx context.Context, data *User, session sqlx.Session) error
         Delete(ctx context.Context, id int64, session sqlx.Session) error
     }
 
@@ -47,10 +47,11 @@ type (
         Mobile    string       `db:"mobile"` // 手机号
         Sex       int64        `db:"sex"`
         Version   int64        `db:"version"`
-        Password  string       `db:"password"`                    // 密码
+        Password  string       `db:"password"`  // 密码
         Nickname  string       `db:"nick_name"` // 昵称
-        Info      string       `db:"info"`                        // info
-        Avatar    string       `db:"avatar"`                      // 头像
+        Info      string       `db:"info"`      // info
+        Avatar    string       `db:"avatar"`    // 头像
+        Location  string       `db:"location"`
     }
 )
 
@@ -82,6 +83,7 @@ func (m *defaultUserModel) Delete(ctx context.Context, id int64, session sqlx.Se
 func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error) {
     userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, id)
     var resp User
+    // 会先去Redis查询，查到就直接返回，不会去查mysql
     err := m.QueryRowCtx(ctx, &resp, userIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
         query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", userRows, m.table)
         return conn.QueryRowCtx(ctx, v, query, id)
@@ -103,18 +105,24 @@ func (m *defaultUserModel) Insert(ctx context.Context, data *User, session sqlx.
     return m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
         query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
         if session != nil {
-            return session.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar)
+            return session.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Location)
         }
-        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar)
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Location)
     }, userIdKey, userMobileKay)
 }
 
-func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
+func (m *defaultUserModel) Update(ctx context.Context, data *User, session sqlx.Session) error {
     userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, data.Id)
+    userMobileKey := fmt.Sprintf("%s%v", cacheUserMobilePrefix, data.Mobile)
+    // 不更新手机号
+    userRowsWithPlaceHolder = strings.Join(stringx.Remove(builder.RawFieldNames(&User{}), "`mobile`", "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
     _, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
         query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Mobile, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Id)
-    }, userIdKey)
+        if session != nil {
+            return session.ExecCtx(ctx, query, data.DeletedAt, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Location, data.Id)
+        }
+        return conn.ExecCtx(ctx, query, data.DeletedAt, data.Sex, data.Version, data.Password, data.Nickname, data.Info, data.Avatar, data.Location, data.Id)
+    }, userIdKey, userMobileKey)
     return err
 }
 

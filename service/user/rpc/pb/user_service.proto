@@ -13,6 +13,7 @@ message User {
   int64  sex = 4;
   string avatar = 5;
   string info = 6;
+  string location = 7;
 }
 
 message UserAuth {
@@ -30,14 +31,22 @@ service UserService {
   rpc login(LoginReq) returns(LoginResp);
   // 注册
   rpc register(RegisterReq) returns(RegisterResp);
-  // 获取某个用户信息
-  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
   // 获取某个用户平台key
   rpc getUserAuthByAuthKey(GetUserAuthByAuthKeyReq) returns(GetUserAuthByAuthKeyResp);
   // 获取某个用户平台key
   rpc getUserAuthByUserId(GetUserAuthByUserIdReq) returns(GetUserAuthyUserIdResp);
   // 生成token
   rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
+
+
+  // ============================ 用户操作 =======================
+
+  // 获取某个用户信息
+  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
+
+  // 修改用户信息
+  rpc editUserInfo(EditUserInfoReq) returns(EditUserInfoResp);
+
 
   // ============================ 用户关系 =======================
   // 关注对方
@@ -90,7 +99,13 @@ message GetUserInfoReq {
 message GetUserInfoResp {
   User user = 1;
 }
-
+message EditUserInfoReq {
+  User user = 1;
+}
+message EditUserInfoResp {
+  string retMsg = 1;
+  uint32 retCode = 2;
+}
 message GetUserAuthByAuthKeyReq {
   string  authKey = 1;
   string  authType = 2;
