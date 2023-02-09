@@ -45,9 +45,14 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.UnfollowHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodGet,
 				Path:    "/user/getFollowList",
 				Handler: user.GetFollowListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/getFansList",
+				Handler: user.GetFansListHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

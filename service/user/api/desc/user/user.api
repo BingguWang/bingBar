@@ -65,6 +65,18 @@ type (
 )
 
 type (
+    GetFansListReq {
+        PageNo int64 `json:"pageNo"`
+        PageSize int64 `json:"pageSize"`
+    }
+    GetFansListResp {
+        RetMsg string `json:"retMsg"`
+        UserList []User `json:"userList"`
+    }
+)
+
+
+type (
     UserInfoReq {
     }
     UserInfoResp {

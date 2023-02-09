@@ -33,7 +33,7 @@ func (l *GetFollowedListByUserIDLogic) GetFollowedListByUserID(in *pb.GetFollowe
     UserFollowedSetPrefixKey := fmt.Sprintf("%s%v", UserFollowedSetPrefix, in.UserId)
     keys, cur, err := l.svcCtx.Redis.SscanCtx(l.ctx, UserFollowedSetPrefixKey, uint64(in.GetPageNo()-1), "", in.GetPageSize())
     if err != nil {
-        return nil, errors.Wrapf(xerr.NewErrCode(xerr.ERROR_CODE_SADD_FAILED), "redis Sscan faied ,key : %v , err : %s", UserFollowedSetPrefixKey, err.Error())
+        return nil, errors.Wrapf(xerr.NewErrCode(xerr.ERROR_CODE_SSCAN_FAILED), "redis Sscan faied ,key : %v , err : %s", UserFollowedSetPrefixKey, err.Error())
     }
     fmt.Println(cur)
     resp := &pb.GetFollowedListByUserIDResp{UserList: make([]*pb.User, len(keys))}

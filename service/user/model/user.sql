@@ -11,5 +11,6 @@ CREATE TABLE `user`
     `nick_name`  VARCHAR(32) COLLATE utf8mb4_unicode_ci  DEFAULT "" COMMENT '昵称',
     `info`       VARCHAR(256) COLLATE utf8mb4_unicode_ci DEFAULT "" COMMENT 'info',
     `avatar`     VARCHAR(256) COLLATE utf8mb4_unicode_ci DEFAULT "" COMMENT '头像',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `mobile_u_idx` (`mobile`)
 ) DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

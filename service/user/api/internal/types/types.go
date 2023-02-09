@@ -58,6 +58,16 @@ type GetFollowListResp struct {
 	UserList []User `json:"userList"`
 }
 
+type GetFansListReq struct {
+	PageNo   int64 `json:"pageNo"`
+	PageSize int64 `json:"pageSize"`
+}
+
+type GetFansListResp struct {
+	RetMsg   string `json:"retMsg"`
+	UserList []User `json:"userList"`
+}
+
 type UserInfoReq struct {
 }
 

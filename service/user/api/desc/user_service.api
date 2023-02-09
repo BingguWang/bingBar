@@ -44,5 +44,9 @@ service UserService {
 	
 	@doc "获取关注列表"
 	@handler getFollowList
-	post /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
+	get /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
+	
+	@doc "获取粉丝列表"
+	@handler getFansList
+	get /user/getFansList (GetFansListReq) returns (GetFansListResp)
 }
