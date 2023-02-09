@@ -19,8 +19,8 @@ func (c CommonResult) Success() bool {
 func ConstructOkResult(ctx context.Context) *CommonResult {
     result := &CommonResult{
         //TraceId: ctx.Value(HEADER_NAME_TRACEID).(string),
-        Code:    ERROR_CODE_OK,
-        LogKV:   make(map[string]interface{}),
+        Code:  ERROR_CODE_OK,
+        LogKV: make(map[string]interface{}),
     }
     return result
 }

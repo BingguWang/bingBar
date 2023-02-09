@@ -1,12 +1,12 @@
 # bingBar
 
 ## 介绍
+
 之江星海存储云平台后端仓库。
 
 ## 软件架构
+
 软件架构说明
-
-
 
 ### 项目运行
 
@@ -15,19 +15,17 @@
 
 2. shell运行(构建容器并运行容器)
 
-
 #### Redis运行
 
-1. mkdir -p /home/wangbing/redis/conf
-mkdir -p /home/wangbing/redis/data
+1. mkdir -p /home/wangbing/redis/conf mkdir -p /home/wangbing/redis/data
 
-2. cd /home/redis-test/conf 
-sudo wget http://download.redis.io/redis-stable/redis.conf
+2. cd /home/redis-test/conf sudo wget http://download.redis.io/redis-stable/redis.conf
 
 
 3. 在redis.conf里先开启Redis AOF:
--   appendonly yes  
--   appendfsync everysec
+
+- appendonly yes
+- appendfsync everysec
 
 4. docker run 命令运行容器:
    ```
@@ -43,8 +41,11 @@ sudo wget http://download.redis.io/redis-stable/redis.conf
    --bind 0.0.0.0 \
    --requirepass "123456"
    ```   
+
 #### Etcd运行
-   docker 运行 etcd
+
+docker 运行 etcd
+
    ```
    docker run -d --name etcd-server \
     --network app-tier \
@@ -55,6 +56,7 @@ sudo wget http://download.redis.io/redis-stable/redis.conf
    ```
 
 #### Mysql运行
+
 mysql 镜像位置: icmp.harbor/starocean/mysql:8.0
 
 1. 在/home/mysql/conf下创建my.cnf文件,添加如下内容:
@@ -70,7 +72,7 @@ mysql 镜像位置: icmp.harbor/starocean/mysql:8.0
    [mysql]
    default-character-set = utf8mb4
    ```
-   
+
 2. docker run 命令运行容器:
    ```
    docker run \

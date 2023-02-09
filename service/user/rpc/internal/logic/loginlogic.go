@@ -73,7 +73,7 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 
     //   解码比较
     if !(tool.Md5ByString(password) == one.Password) {
-       return 0, errors.Wrap(ErrUsernamePwdError, "密码匹配出错")
+        return 0, errors.Wrap(ErrUsernamePwdError, "密码匹配出错")
     }
 
     return one.Id, nil

@@ -1,30 +1,30 @@
 package logic
 
 import (
-	"context"
+    "context"
 
-	"github.com/BingguWang/bingBar/service/user/rpc/internal/svc"
-	"github.com/BingguWang/bingBar/service/user/rpc/pb/pb"
+    "github.com/BingguWang/bingBar/service/user/rpc/internal/svc"
+    "github.com/BingguWang/bingBar/service/user/rpc/pb/pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
+    "github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetUserAuthByAuthKeyLogic struct {
-	ctx    context.Context
-	svcCtx *svc.ServiceContext
-	logx.Logger
+    ctx    context.Context
+    svcCtx *svc.ServiceContext
+    logx.Logger
 }
 
 func NewGetUserAuthByAuthKeyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserAuthByAuthKeyLogic {
-	return &GetUserAuthByAuthKeyLogic{
-		ctx:    ctx,
-		svcCtx: svcCtx,
-		Logger: logx.WithContext(ctx),
-	}
+    return &GetUserAuthByAuthKeyLogic{
+        ctx:    ctx,
+        svcCtx: svcCtx,
+        Logger: logx.WithContext(ctx),
+    }
 }
 
 func (l *GetUserAuthByAuthKeyLogic) GetUserAuthByAuthKey(in *pb.GetUserAuthByAuthKeyReq) (*pb.GetUserAuthByAuthKeyResp, error) {
-	// todo: add your logic here and delete this line
+    // todo: add your logic here and delete this line
 
-	return &pb.GetUserAuthByAuthKeyResp{}, nil
+    return &pb.GetUserAuthByAuthKeyResp{}, nil
 }

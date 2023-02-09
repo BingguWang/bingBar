@@ -1,64 +1,64 @@
 syntax = "v1"
 
 info(
-	title: "用户服务"
-	desc: "用户服务"
+    title: "用户服务"
+    desc: "用户服务"
 )
 import (
-	"user/user.api"
+    "user/user.api"
 )
 
 //no need login
 @server(
-	prefix: usercenter/v1
-	group: user
+    prefix: usercenter/v1
+    group: user
 )
 service UserService {
-	@doc "register"
-	@handler register
-	post /user/register (RegisterReq) returns (RegisterResp)
-	
-	@doc "login"
-	@handler login
-	post /user/login (LoginReq) returns (LoginResp)
+    @doc "register"
+    @handler register
+    post /user/register (RegisterReq) returns (RegisterResp)
+
+    @doc "login"
+    @handler login
+    post /user/login (LoginReq) returns (LoginResp)
 }
 
 //need login
 @server(
-	prefix: usercenter/v1
-	group: user
-	jwt: JwtAuth
+    prefix: usercenter/v1
+    group: user
+    jwt: JwtAuth
 )
 service UserService {
-	@doc "获取某用户信息"
-	@handler userDetail
-	post /user/detail (UserInfoReq) returns (UserInfoResp)
-	
-	@doc "关注"
-	@handler follow
-	post /user/follow (FollowReq) returns (FollowResp)
-	
-	@doc "取关"
-	@handler unfollow
-	post /user/unfollow (UnFollowReq) returns (UnFollowResp)
-	
-	@doc "获取关注列表"
-	@handler getFollowList
-	get /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
-	
-	@doc "获取粉丝列表"
-	@handler getFansList
-	get /user/getFansList (GetFansListReq) returns (GetFansListResp)
-	
-	@doc "获取好友列表"
-	@handler getFriendList
-	get /user/getFriendList (GetFriendListReq) returns (GetFriendListResp)
-	
-	@doc "你关注的xxx也关注了他"
-	@handler getMutualFollowList
-	post /user/getMutualFollowList (GetMutualFollowListReq) returns (GetMutualFollowListResp)
-	
-	@doc "你和他有xxx等x个共同好友"
-	@handler getMutualFriendList
-	post /user/getMutualFriendList (GetMutualFriendListReq) returns (GetMutualFriendListResp)
+    @doc "获取某用户信息"
+    @handler userDetail
+    post /user/detail (UserInfoReq) returns (UserInfoResp)
+
+    @doc "关注"
+    @handler follow
+    post /user/follow (FollowReq) returns (FollowResp)
+
+    @doc "取关"
+    @handler unfollow
+    post /user/unfollow (UnFollowReq) returns (UnFollowResp)
+
+    @doc "获取关注列表"
+    @handler getFollowList
+    get /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
+
+    @doc "获取粉丝列表"
+    @handler getFansList
+    get /user/getFansList (GetFansListReq) returns (GetFansListResp)
+
+    @doc "获取好友列表"
+    @handler getFriendList
+    get /user/getFriendList (GetFriendListReq) returns (GetFriendListResp)
+
+    @doc "你关注的xxx也关注了他"
+    @handler getMutualFollowList
+    post /user/getMutualFollowList (GetMutualFollowListReq) returns (GetMutualFollowListResp)
+
+    @doc "你和他有xxx等x个共同好友"
+    @handler getMutualFriendList
+    post /user/getMutualFriendList (GetMutualFriendListReq) returns (GetMutualFriendListResp)
 }
