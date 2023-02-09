@@ -118,16 +118,19 @@ message GenerateTokenResp {
 
 // ================================ 用户关系 ====================================
 message GetMutualFollowedResp {
-  repeated int64  mutualFollowedList = 1;
+  repeated User  userList = 1;
 }
 message GetMutualFollowedReq {
-  repeated int64  userIds = 1;
+  int64  userId = 1;
+  int64  followed = 2;
+  int64 pageSize = 3;
 }
 message GetMutualFriendsReq {
   repeated int64  userIds = 1;
+  int64 pageSize = 2;
 }
 message GetMutualFriendsResp {
-  repeated User mutualFriendList = 1;
+  repeated User userList = 1;
 }
 message GetFollowedListByUserIDReq {
   int64 userId = 1;

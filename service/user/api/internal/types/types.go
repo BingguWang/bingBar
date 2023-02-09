@@ -78,6 +78,16 @@ type GetFriendListResp struct {
 	UserList []User `json:"userList"`
 }
 
+type GetMutualFollowListReq struct {
+	Followed int64 `json:"followed"`
+	PageSize int64 `json:"pageSize"`
+}
+
+type GetMutualFollowListResp struct {
+	RetMsg   string `json:"retMsg"`
+	UserList []User `json:"userList"`
+}
+
 type UserInfoReq struct {
 }
 

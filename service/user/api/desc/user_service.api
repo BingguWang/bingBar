@@ -53,4 +53,8 @@ service UserService {
 	@doc "获取好友列表"
 	@handler getFriendList
 	get /user/getFriendList (GetFriendListReq) returns (GetFriendListResp)
+	
+	@doc "你关注的xxx也关注了他"
+	@handler getMutualFollowList
+	post /user/getMutualFollowList (GetMutualFollowListReq) returns (GetMutualFollowListResp)
 }
