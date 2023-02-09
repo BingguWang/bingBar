@@ -30,7 +30,12 @@ func NewFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FollowLogi
 
 // Follow 关注
 func (l *FollowLogic) Follow(in *pb.FollowReq) (*pb.FollowResp, error) {
-    fmt.Println(in.UserId)
+    // 检查被关注的用户是否存在
+    _, err2 := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
+    if err2 != nil {
+        return nil, errors.Wrapf(xerr.NewErrCode(xerr.ERROR_CODE_DB_ERROR), "find the followed user faied ,key : %v , err : %s", in.UserId, err2.Error())
+    }
+
     // 更新关注集合
     UserFollowedSetPrefixKey := fmt.Sprintf("%s%v", UserFollowedSetPrefix, in.FollowBy)
     _, err := l.svcCtx.Redis.SaddCtx(l.ctx, UserFollowedSetPrefixKey, in.UserId)
