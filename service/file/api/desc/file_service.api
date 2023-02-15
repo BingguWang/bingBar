@@ -1,0 +1,70 @@
+syntax = "v1"
+
+info(
+	title: "文件流服务"
+	desc: "文件流服务"
+)
+import (
+	"file/file.api"
+)
+
+//no need login
+@server(
+	prefix: filecenter/v1
+	group: file
+)
+service FileService {
+	@doc "upload"
+	@handler upload
+	post /file/upload (UploadFileRequest) returns (UploadFileResponse)
+	
+	@doc "download"
+	@handler download
+	post /file/download (DownloadFileRequest) returns (DownloadFileResponse)
+}
+
+//need login
+//@server(
+//	prefix: usercenter/v1
+//	group: user
+//	jwt: JwtAuth
+//)
+//service FileService {
+//	@doc "获取某用户信息"
+//	@handler userDetail
+//	post /user/detail (UserInfoReq) returns (UserInfoResp)
+//
+//	@doc "修改用户信息"
+//	@handler editUser
+//	post /user/editUser (EditUserReq) returns (EditUserResp)
+//
+//	// ========================== 用户关系 ====================================
+//
+//	@doc "关注"
+//	@handler follow
+//	post /user/follow (FollowReq) returns (FollowResp)
+//
+//	@doc "取关"
+//	@handler unfollow
+//	post /user/unfollow (UnFollowReq) returns (UnFollowResp)
+//
+//	@doc "获取关注列表"
+//	@handler getFollowList
+//	get /user/getFollowList (GetFollowListReq) returns (GetFollowListResp)
+//
+//	@doc "获取粉丝列表"
+//	@handler getFansList
+//	get /user/getFansList (GetFansListReq) returns (GetFansListResp)
+//
+//	@doc "获取好友列表"
+//	@handler getFriendList
+//	get /user/getFriendList (GetFriendListReq) returns (GetFriendListResp)
+//
+//	@doc "你关注的xxx也关注了他"
+//	@handler getMutualFollowList
+//	post /user/getMutualFollowList (GetMutualFollowListReq) returns (GetMutualFollowListResp)
+//
+//	@doc "你和他有xxx等x个共同好友"
+//	@handler getMutualFriendList
+//	post /user/getMutualFriendList (GetMutualFriendListReq) returns (GetMutualFriendListResp)
+//}

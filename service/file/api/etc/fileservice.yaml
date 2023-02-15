@@ -1,0 +1,6 @@
+Name: FileService
+Host: 0.0.0.0
+Port: 50051
+
+MaxBytes: 104857600
+Timeout: 500000

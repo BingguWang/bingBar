@@ -1,0 +1,21 @@
+syntax = "v1"
+info(
+    title: "文件实例"
+    desc: "文件实例"
+)
+
+
+type (
+    UploadFileRequest {
+    }
+    UploadFileResponse {
+    }
+)
+
+
+type (
+    DownloadFileRequest {
+    }
+    DownloadFileResponse {
+    }
+)
