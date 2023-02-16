@@ -3,7 +3,7 @@ package file
 import (
     "fmt"
     tool "github.com/BingguWang/bingBar/common/utils"
-    "github.com/BingguWang/bingBar/service/file/api/internal/logic/user"
+    fi "github.com/BingguWang/bingBar/service/file/api/internal/logic/file"
     "github.com/BingguWang/bingBar/service/file/api/internal/types"
     "github.com/zeromicro/go-zero/core/logx"
     "github.com/zeromicro/go-zero/rest/httpx"
@@ -20,7 +20,7 @@ func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
             return
         }
         // 文件接收
-        if err2 := r.ParseMultipartForm(20); err2 != nil {
+        if err2 := r.ParseMultipartForm(1 << 20); err2 != nil {
             httpx.ErrorCtx(r.Context(), w, err2)
         }
         logx.Info(r.MultipartForm)
@@ -35,7 +35,7 @@ func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
         fileName := r.FormValue("filename")
 
-        l := user.NewUploadLogic(r.Context(), svcCtx)
+        l := fi.NewUploadLogic(r.Context(), svcCtx)
         resp, err := l.Upload(file, fileName, &req)
         //resp, err := l.Upload(nil, "fileName", &req)
         if err != nil {
