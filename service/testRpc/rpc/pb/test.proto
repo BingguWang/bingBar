@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+
+
+//service
+service TestService {
+  rpc testRpcFunc(SimpleReq) returns(SimpleResp);
+}
+
+message SimpleReq {
+
+}
+message SimpleResp {
+
+}
+

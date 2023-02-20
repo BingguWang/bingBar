@@ -1,0 +1,12 @@
+Name: BingbarService
+Host: 0.0.0.0
+Port: 50053
+
+
+TestServiceRpcConf:
+    Endpoints:
+      - 127.0.0.1:50054
+    NonBlock: true
+
+ClientMiddlewaresConf:
+    Breaker: true
