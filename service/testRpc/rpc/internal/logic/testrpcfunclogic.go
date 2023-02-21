@@ -28,7 +28,7 @@ func NewTestRpcFuncLogic(ctx context.Context, svcCtx *svc.ServiceContext) *TestR
 func (l *TestRpcFuncLogic) TestRpcFunc(in *pb.SimpleReq) (*pb.SimpleResp, error) {
     //return &pb.SimpleResp{}, nil
     // 随机设置错误
-    if rand.Int()%7 != 0 {
+    if rand.Int()%7 == 0 {
         logx.Infof("调用失败") // 看这个输出的次数就可以知道被熔断器熔断了的请求有多少
         return nil, errors.New("call TestRpcFunc failed")
     }
