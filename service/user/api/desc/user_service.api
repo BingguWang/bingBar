@@ -67,4 +67,10 @@ service UserService {
 	@doc "你和他有xxx等x个共同好友"
 	@handler getMutualFriendList
 	post /user/getMutualFriendList (GetMutualFriendListReq) returns (GetMutualFriendListResp)
+	
+	// ========================== 用户相关历史记录 ====================================
+	@doc "historyfans"
+	@handler historyfans
+	post /user/history/fans (FansHistoryReq) returns (FansHistoryResp)
+	
 }

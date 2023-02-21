@@ -119,3 +119,17 @@ type UserInfoReq struct {
 type UserInfoResp struct {
 	UserInfo User `json:"userInfo"`
 }
+
+type FansHistoryReq struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}
+
+type FansHistoryResp struct {
+	HistoryItems []HistoryItem `json:"historyItem"`
+}
+
+type HistoryItem struct {
+	Value  int64 `json:"value"`
+	TimeAt int64 `json:"timeAt"`
+}

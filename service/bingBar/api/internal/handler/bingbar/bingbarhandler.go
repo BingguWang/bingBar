@@ -1,7 +1,7 @@
 package bingbar
 
 import (
-    "github.com/BingguWang/bingBar/service/bingBar/api/mointor"
+    "github.com/BingguWang/bingBar/service/bingBar/api/prom"
     "net/http"
 
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/logic/bingbar"
@@ -17,7 +17,7 @@ func BingbarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
             httpx.ErrorCtx(r.Context(), w, err)
             return
         }
-        counter := mointor.GetRequestCounter()
+        counter := prom.GetRequestCounter()
         // prom指标计数值加1
         counter.RequestCounter.Inc()
 

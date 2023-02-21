@@ -6,7 +6,7 @@ import (
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/config"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/handler"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/svc"
-    "github.com/BingguWang/bingBar/service/bingBar/api/mointor"
+    "github.com/BingguWang/bingBar/service/bingBar/api/prom"
     "github.com/zeromicro/go-zero/core/conf"
     "github.com/zeromicro/go-zero/rest"
 )
@@ -29,7 +29,7 @@ func init() {
       }, []string{"job_type"})
       jobsInQueueRpc.WithLabelValues("myJob-2").Add(10)*/
 
-    mointor.InitCollector()
+    prom.InitCollector()
 }
 func main() {
     flag.Parse()

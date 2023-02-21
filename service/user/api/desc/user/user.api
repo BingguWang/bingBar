@@ -132,3 +132,18 @@ type (
         UserInfo User `json:"userInfo"`
     }
 )
+
+
+type (
+    FansHistoryReq {
+        Start int64 `json:"start"`
+        End int64 `json:"end"`
+    }
+    FansHistoryResp {
+        HistoryItems []HistoryItem `json:"historyItem"`
+    }
+)
+type HistoryItem {
+    Value int64 `json:"value"`
+    TimeAt int64 `json:"timeAt"`
+}
