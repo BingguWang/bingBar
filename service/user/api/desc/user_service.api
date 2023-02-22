@@ -73,4 +73,11 @@ service UserService {
 	@handler historyfans
 	post /user/history/fans (FansHistoryReq) returns (FansHistoryResp)
 	
+	@doc "统计所有用户粉丝数量情况"
+	@handler summary
+	post /user/summary/fans (SummaryFansReq) returns (SummaryFansResp)
+	
+	@doc "统计所有用户粉丝数量情况直方图"
+	@handler histogram
+	post /user/histogram/fans (HistogramFansReq) returns (HistogramFansResp)
 }

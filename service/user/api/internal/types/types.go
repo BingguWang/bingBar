@@ -133,3 +133,27 @@ type HistoryItem struct {
 	Value  int64 `json:"value"`
 	TimeAt int64 `json:"timeAt"`
 }
+
+type SummaryFansReq struct {
+}
+
+type SummaryFansResp struct {
+	SummaryItems []SummaryFansItem `json:"historyItem"`
+}
+
+type SummaryFansItem struct {
+	Percentile string  `json:"percentile"`
+	Value      float64 `json:"value"`
+}
+
+type HistogramFansReq struct {
+}
+
+type HistogramFansResp struct {
+	HistogramFansItems []HistogramFansItem `json:"histogramFansItems"`
+}
+
+type HistogramFansItem struct {
+	Le    string  `json:"le"`
+	Value float64 `json:"value"`
+}

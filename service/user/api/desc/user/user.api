@@ -147,3 +147,27 @@ type HistoryItem {
     Value int64 `json:"value"`
     TimeAt int64 `json:"timeAt"`
 }
+
+type (
+    SummaryFansReq {
+    }
+    SummaryFansResp {
+        SummaryItems []SummaryFansItem `json:"historyItem"`
+    }
+)
+type SummaryFansItem {
+    Percentile string `json:"percentile"`
+    Value float64 `json:"value"`
+}
+
+type (
+    HistogramFansReq {
+    }
+    HistogramFansResp {
+        HistogramFansItems []HistogramFansItem `json:"histogramFansItems"`
+    }
+)
+type HistogramFansItem {
+    Le string `json:"le"`
+    Value float64 `json:"value"`
+}

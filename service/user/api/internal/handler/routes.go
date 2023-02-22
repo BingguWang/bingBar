@@ -79,6 +79,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/history/fans",
 				Handler: user.HistoryfansHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/summary/fans",
+				Handler: user.SummaryHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/histogram/fans",
+				Handler: user.HistogramHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/usercenter/v1"),
