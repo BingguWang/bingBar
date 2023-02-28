@@ -36,12 +36,12 @@ func InitCollector() {
     hi := NewFansHistogram(histogram)
 
     // 传入的i假设就是我们每个用户的粉丝数
-    for i := 1; i <= 100; i++ {
-        //a := (time.Now().Second() + rand.Int()) % 100
-        a := i
-        summary.WithLabelValues("fans").Observe(float64(a))
-        histogram.WithLabelValues("fans_histogram").Observe(float64(a))
-    }
+    //for i := 1; i <= 100; i++ {
+    //    //a := (time.Now().Second() + rand.Int()) % 100
+    //    a := i
+    //    summary.WithLabelValues("fans").Observe(float64(a))
+    //    histogram.WithLabelValues("fans_histogram").Observe(float64(a))
+    //}
 
     prometheus.MustRegister(gauge.GaugeVec, su.SummaryVec, hi.HistogramVec)
 

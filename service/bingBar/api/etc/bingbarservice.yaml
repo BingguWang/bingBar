@@ -7,6 +7,8 @@ TestServiceRpcConf:
     Endpoints:
       - 127.0.0.1:50054
     NonBlock: true
+    Token: "test-auth"
+    App: "BingbarService"
 
 ClientMiddlewaresConf:
     Breaker: true
@@ -15,3 +17,10 @@ Prometheus:
   Host: 0.0.0.0
   Port: 4003
   Path: /metrics
+
+
+
+Redis:
+  Type: "node"
+  Password: "123456"
+  Host: 127.0.0.1:6379

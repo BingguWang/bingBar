@@ -9,3 +9,11 @@ Prometheus:
   Host: 0.0.0.0
   Port: 4004
   Path: /metrics
+
+Auth: true
+StrictControl: false
+Redis:
+  Key: "test-auth"
+  Type: "node"
+  Password: "123456"
+  Host: 127.0.0.1:6379

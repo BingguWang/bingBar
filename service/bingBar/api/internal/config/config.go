@@ -8,4 +8,9 @@ import (
 type Config struct {
     rest.RestConf
     TestServiceRpcConf zrpc.RpcClientConf
+    Redis              struct {
+        Password string
+        Type     string
+        Host     string
+    }
 }
