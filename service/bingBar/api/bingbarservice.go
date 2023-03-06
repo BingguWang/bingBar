@@ -5,6 +5,7 @@ import (
     "fmt"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/config"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/handler"
+    "github.com/BingguWang/bingBar/service/bingBar/api/internal/middleware"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/svc"
     "github.com/BingguWang/bingBar/service/bingBar/api/prom"
     "github.com/zeromicro/go-zero/core/conf"
@@ -42,6 +43,8 @@ func main() {
 
     ctx := svc.NewServiceContext(c)
     handler.RegisterHandlers(server, ctx)
+    // 全局中间件
+    server.Use(middleware.MyLimiterHandler(ctx))
 
     fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
     server.Start()
