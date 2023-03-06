@@ -6,11 +6,8 @@ import (
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/svc"
     "github.com/BingguWang/bingBar/service/bingBar/api/internal/types"
     "github.com/BingguWang/bingBar/service/bingBar/api/prom"
-    "github.com/pkg/errors"
-    "github.com/zeromicro/go-zero/core/limit"
     "github.com/zeromicro/go-zero/rest/httpx"
     "net/http"
-    "sync/atomic"
 )
 
 func BingbarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -24,21 +21,21 @@ func BingbarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
         // prom指标计数值加1
         counter.RequestCounter.Inc()
 
-        const (
-            burst = 1000 // 令牌桶容量
-            rate  = 200  // 令牌产生速率
-        )
-        store := svcCtx.Redis
-        fmt.Println(store.Ping())
-        // New tokenLimiter
-        limiter := limit.NewTokenLimiter(rate, burst, store, "rate-test")
-        if limiter.Allow() {
-            atomic.AddInt32(&svcCtx.Allowed, 1)
-        } else {
-            atomic.AddInt32(&svcCtx.Denied, 1)
-            httpx.ErrorCtx(r.Context(), w, errors.New("被限流"))
-            return
-        }
+        //const (
+        //    burst = 1000 // 令牌桶容量
+        //    rate  = 200  // 令牌产生速率
+        //)
+        //store := svcCtx.Redis
+        //fmt.Println(store.Ping())
+        //// New tokenLimiter
+        //limiter := limit.NewTokenLimiter(rate, burst, store, "rate-test")
+        //if limiter.Allow() {
+        //    atomic.AddInt32(&svcCtx.Allowed, 1)
+        //} else {
+        //    atomic.AddInt32(&svcCtx.Denied, 1)
+        //    httpx.ErrorCtx(r.Context(), w, errors.New("被限流"))
+        //    return
+        //}
         fmt.Printf("allowed: %d, denied: %d ", svcCtx.Allowed, svcCtx.Denied)
 
         l := bingbar.NewBingbarLogic(r.Context(), svcCtx)
